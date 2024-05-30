@@ -44,7 +44,7 @@ filter_columns = {
 
 # make drop down selections for each filter
 for column, options in filter_columns.items():
-    selected_values = st.multiselect(f"Select value for '{column}'", options) #
+    selected_values = st.multiselect(f"Select value for '{column}'", options) 
     if selected_values:
         cols[column] = selected_values  # Add selected values to the filter criteria
 
