@@ -8,10 +8,10 @@ def filter_count(df, cols, variables):
     for column, values in cols.items():  # iterates through each filter
         filtered_df = filtered_df[filtered_df[column].isin(values)]  # applies filter to data
     
-    # # count non-blank records for each variable
+    # count non-blank records for each variable
     non_blank_counts = {var: filtered_df[var].notna().sum() for var in variables} 
     
-    return non_blank_counts  # Return the counts
+    return non_blank_counts 
 
 # streamlit title and subtitle
 st.title("ACL Dashboard")  # title
