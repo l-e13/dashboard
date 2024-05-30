@@ -15,7 +15,7 @@ def filter_count(df, cols, variables):
 
 # streamlit title and subtitle
 st.title("ACL Dashboard")  # title
-st.write("Apply filters to see non-blank record counts for variables.")
+st.header("Apply filters to see non-blank record counts for variables.")
 
 # upload dataset in pandas
 data = pd.read_excel("Dashboard Headers.xlsx")
@@ -30,7 +30,7 @@ variables = [
     "rts", "reinjury"]
 
 # ask for filter criteria
-st.write("Enter filter criteria:")
+st.subheader("Enter filter criteria:")
 cols = {}
 
 # filters with subgroups
