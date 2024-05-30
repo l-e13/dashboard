@@ -15,7 +15,7 @@ def filter_count(df, cols, variables):
 
 # streamlit title and subtitle
 st.title("ACL Dashboard")  # title
-st.header("Apply filters to see non-blank record counts for variables.")
+st.write("Apply filters to see non-blank record counts for variables.")
 
 # upload dataset in pandas
 data = pd.read_excel("Dashboard Headers.xlsx")
