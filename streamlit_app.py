@@ -56,3 +56,5 @@ if st.button("Apply Filters"): # adding button
     st.write("Counts of Non-Blank Records for Variables:")
     for var, count in result_counts.items():
         st.write(f"{var}: {count}")
+
+# add a button to clear all filters?
