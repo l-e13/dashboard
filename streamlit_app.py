@@ -3,30 +3,32 @@ import pandas as pd
 
 # streamlit title and subtitle
 st.title("ACL Dashboard")  # title
-st.write("Apply filters to see non-blank record counts for variables.")
+st.write("Apply filters to see non-blank record counts for variables and preview the dataset.")
 
 # upload dataset in pandas
 data = pd.read_excel("PRODRSOMDashboardDat_DATA_2024-06-04_1845.xlsx")
 
-# function applies filters and counts non blank records for each variable
+# Function to fill missing values for each record_id
+def propagate_values(df, column):
+    df[column] = df.groupby('record_id')[column].ffill().bfill()
+    return df
+
+# Propagate values for 'sex_dashboard' and 'graft_dashboard2'
+data = propagate_values(data, 'sex_dashboard')
+data = propagate_values(data, 'graft_dashboard2')
+
+# Function applies filters and counts non blank records for each variable
 def filter_count(df, cols, variables):
     filtered_df = df.copy()
     for column, values in cols.items():  # iterates through each filter
-        # Map "Yes" and "No" to 1 and 0 respectively for 'prior_aclr' filter
-        if column in ['prior_aclr', 'graft_dashboard2']:
-            if column == 'prior_aclr':
-                values = [1 if val.lower() == 'yes' else 0 for val in values]
-            filtered_df[column] = filtered_df.groupby('record_id')[column].ffill()  # Fill forward for subsequent rows with same record ID
-            filtered_df = filtered_df[filtered_df[column].isin(values)]  # applies filter to data
-        else:
-            filtered_df = filtered_df[filtered_df[column].isin(values)]  # applies filter to data
+        filtered_df = filtered_df[filtered_df[column].isin(values)]  # applies filter to data
     
-    # count non-blank records for each variable
+    # Count non-blank records for each variable
     non_blank_counts = {var: filtered_df[var].notna().sum() for var in variables} 
     
-    return non_blank_counts 
+    return non_blank_counts, filtered_df
 
-# defining variables to count non blank records
+# Define variables to count non blank records
 variables = [
     "insurance_dashboard_use", "ikdc", "pedi_ikdc", "marx", "pedi_fabs", "koos_pain", 
     "koos_sx", "koos_adl", "koos_sport", "koos_qol", "acl_rsi", "tsk", "rsi_score", 
@@ -35,11 +37,11 @@ variables = [
     "lsi_ext_isok_90", "lsi_flex_isok_90", "lsi_ext_isok_180", "lsi_flex_isok_180", 
     "rts", "reinjury"]
 
-# ask for filter criteria
+# Ask for filter criteria
 st.subheader("Enter filter criteria:")
 cols = {}
 
-# filters with subgroups
+# Filters with subgroups
 filter_columns = {
     "sex_dashboard": ["Female", "Male"],
     "age_group_dashboard_use": ["12 to 14 years", "15 to 17 years", "18 to 20 years", "21 to 25 years", "26 to 34 years"],
@@ -48,21 +50,23 @@ filter_columns = {
     "tss_dashboard": ["13 to 24 months", "8 to 12 months", "5 to 7 months", "3 to 4 months"]
 }
 
-# make drop down selections for each filter
+# Make drop down selections for each filter
 for column, options in filter_columns.items():
-    selected_values = st.multiselect(f"Select value for '{column}'", options) 
+    if column == "prior_aclr":
+        selected_values = st.multiselect(f"Select value for '{column}'", options) 
+        selected_values = [1 if v == "Yes" else 0 for v in selected_values]  # Convert Yes/No to 1/0
+    else:
+        selected_values = st.multiselect(f"Select value for '{column}'", options)
+    
     if selected_values:
         cols[column] = selected_values  # Add selected values to the filter criteria
 
-# call function 
-if st.button("Apply Filters"): # adding button
-    result_counts = filter_count(df=data, cols=cols, variables=variables)
+# Call function 
+if st.button("Apply Filters"):  # Adding button
+    result_counts, filtered_data = filter_count(df=data, cols=cols, variables=variables)
     
-    # print results
+    # Print results
     st.write("Counts of Non-Blank Records for Variables:")
     for var, count in result_counts.items():
         st.write(f"{var}: {count}")
-
-# Add dataset preview
-st.subheader("Preview of Filtered Dataset")
-st.dataframe(data.head())  # Display the first few rows of the filtered dataset
+    
