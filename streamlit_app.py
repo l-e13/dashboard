@@ -14,8 +14,11 @@ def filter_count(df, cols, variables):
     for column, values in cols.items():  # iterates through each filter
         filtered_df = filtered_df[filtered_df[column].isin(values)]  # applies filter to data
     
+    # Replace NaN values with "Not Reported"
+    filtered_df.fillna("Not Reported", inplace=True)
+    
     # count non-blank records for each variable
-    non_blank_counts = {var: filtered_df[var].notna().sum() for var in variables} 
+    non_blank_counts = {var: (filtered_df[var] != "Not Reported").sum() for var in variables} 
     
     return non_blank_counts 
 
@@ -63,13 +66,7 @@ if st.button("Apply Filters"): # adding button
     
     result_counts = filter_count(df=filtered_data, cols=cols, variables=variables)
     
-    # Debugging: Print unique values and data type of each column
-    for col in filtered_data.columns:
-        st.write(f"Unique values in '{col}': {filtered_data[col].unique()}")
-        st.write(f"Data type of '{col}': {filtered_data[col].dtype}")
-    
     # print results
     st.write("Counts of Non-Blank Records for Variables:")
     for var, count in result_counts.items():
         st.write(f"{var}: {count}")
-
