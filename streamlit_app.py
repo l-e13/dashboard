@@ -3,7 +3,7 @@ import pandas as pd
 
 # streamlit title and subtitle
 st.title("ACL Dashboard")  # title
-st.write("Apply filters to see non-blank record counts for variables and preview the dataset.")
+st.write("Apply filters to see non-blank record counts for variables.")
 
 # upload dataset
 data = pd.read_excel("PRODRSOMDashboardDat_DATA_2024-06-04_1845.xlsx")
