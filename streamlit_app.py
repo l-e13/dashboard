@@ -55,7 +55,7 @@ if st.button("Apply Filters"): # adding button
     
     # Debugging: Print the filtered DataFrame
     st.write("Filtered DataFrame:")
-    st.write(filtered_data.head())
+    st.write(filtered_data)
     
     result_counts = filter_count(df=filtered_data, cols=cols, variables=variables)
     
@@ -63,3 +63,4 @@ if st.button("Apply Filters"): # adding button
     st.write("Counts of Non-Blank Records for Variables:")
     for var, count in result_counts.items():
         st.write(f"{var}: {count}")
+
