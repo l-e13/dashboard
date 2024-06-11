@@ -66,6 +66,13 @@ if st.button("Apply Filters"): # adding button
     
     result_counts = filter_count(df=filtered_data, cols=cols, variables=variables)
     
+    # Debugging: Print unique values and data type of variables with unexpected counts
+    for var, count in result_counts.items():
+        if count == 0:
+            st.write(f"Variable '{var}':")
+            st.write(f"Unique values: {filtered_data[var].unique()}")
+            st.write(f"Data type: {filtered_data[var].dtype}")
+    
     # print results
     st.write("Counts of Non-Blank Records for Variables:")
     for var, count in result_counts.items():
