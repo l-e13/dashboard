@@ -49,11 +49,17 @@ for column, options in filter_columns.items():
 
 # call function 
 if st.button("Apply Filters"): # adding button
-    result_counts = filter_count(df=data, cols=cols, variables=variables)
+    filtered_data = data.copy()
+    for column, values in cols.items():
+        filtered_data = filtered_data[filtered_data[column].isin(values)]
+    
+    # Debugging: Print the filtered DataFrame
+    st.write("Filtered DataFrame:")
+    st.write(filtered_data.head())
+    
+    result_counts = filter_count(df=filtered_data, cols=cols, variables=variables)
     
     # print results
     st.write("Counts of Non-Blank Records for Variables:")
     for var, count in result_counts.items():
         st.write(f"{var}: {count}")
-
-# add a button to clear all filters?
