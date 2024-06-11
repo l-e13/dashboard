@@ -8,17 +8,17 @@ st.write("Apply filters to see non-blank record counts for variables.")
 # upload dataset in pandas
 data = pd.read_excel("PRODRSOMDashboardDat_DATA_2024-06-04_1845.xlsx")
 
+# Fill forward missing values within each record for the 'sex_dashboard' variable
+data['sex_dashboard'] = data.groupby('record_id')['sex_dashboard'].ffill()
+
 # function applies filters and counts non blank records for each variable
 def filter_count(df, cols, variables):
     filtered_df = df.copy()
     for column, values in cols.items():  # iterates through each filter
         filtered_df = filtered_df[filtered_df[column].isin(values)]  # applies filter to data
     
-    # Replace NaN values with "Not Reported"
-    filtered_df.fillna("Not Reported", inplace=True)
-    
     # count non-blank records for each variable
-    non_blank_counts = {var: (filtered_df[var] != "Not Reported").sum() for var in variables} 
+    non_blank_counts = {var: filtered_df[var].notna().sum() for var in variables} 
     
     return non_blank_counts 
 
@@ -50,28 +50,9 @@ for column, options in filter_columns.items():
     if selected_values:
         cols[column] = selected_values  # Add selected values to the filter criteria
 
-# Debugging: Display selected filters
-st.write("Selected Filters:")
-st.write(cols)
-
 # call function 
 if st.button("Apply Filters"): # adding button
-    filtered_data = data.copy()
-    for column, values in cols.items():
-        filtered_data = filtered_data[filtered_data[column].isin(values)]
-    
-    # Debugging: Print the filtered DataFrame
-    st.write("Filtered DataFrame:")
-    st.write(filtered_data.head())  # Display the first few rows of the filtered DataFrame
-    
-    result_counts = filter_count(df=filtered_data, cols=cols, variables=variables)
-    
-    # Debugging: Print unique values and data type of variables with unexpected counts
-    for var, count in result_counts.items():
-        if count == 0:
-            st.write(f"Variable '{var}':")
-            st.write(f"Unique values: {filtered_data[var].unique()}")
-            st.write(f"Data type: {filtered_data[var].dtype}")
+    result_counts = filter_count(df=data, cols=cols, variables=variables)
     
     # print results
     st.write("Counts of Non-Blank Records for Variables:")
