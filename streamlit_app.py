@@ -69,4 +69,7 @@ if st.button("Apply Filters"):  # Adding button
     st.write("Counts of Non-Blank Records for Variables:")
     for var, count in result_counts.items():
         st.write(f"{var}: {count}")
-    
+        
+    # Preview of the dataset
+    st.subheader("Filtered Dataset Preview:")
+    st.write(filtered_data.head())
