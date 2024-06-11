@@ -8,9 +8,6 @@ st.write("Apply filters to see non-blank record counts for variables.")
 # upload dataset in pandas
 data = pd.read_excel("PRODRSOMDashboardDat_DATA_2024-06-04_1845.xlsx")
 
-# Fill forward missing values within each record for the 'sex_dashboard' variable
-data['sex_dashboard'] = data.groupby('record_id')['sex_dashboard'].ffill()
-
 # function applies filters and counts non blank records for each variable
 def filter_count(df, cols, variables):
     filtered_df = df.copy()
@@ -58,3 +55,7 @@ if st.button("Apply Filters"): # adding button
     st.write("Counts of Non-Blank Records for Variables:")
     for var, count in result_counts.items():
         st.write(f"{var}: {count}")
+
+# Add dataset preview
+st.subheader("Preview of Filtered Dataset")
+st.dataframe(data.head())  # Display the first few rows of the filtered dataset
