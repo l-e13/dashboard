@@ -1,6 +1,12 @@
 import streamlit as st 
 import pandas as pd
 
+# streamlit title and subtitle
+st.title("ACL Dashboard")  # title
+st.write("Apply filters to see non-blank record counts for variables.")
+
+# upload dataset in pandas
+data = pd.read_excel("PRODRSOMDashboardDat_DATA_2024-06-04_1845.xlsx")
 
 # function applies filters and counts non blank records for each variable
 def filter_count(df, cols, variables):
@@ -12,13 +18,6 @@ def filter_count(df, cols, variables):
     non_blank_counts = {var: filtered_df[var].notna().sum() for var in variables} 
     
     return non_blank_counts 
-
-# streamlit title and subtitle
-st.title("ACL Dashboard")  # title
-st.write("Apply filters to see non-blank record counts for variables.")
-
-# upload dataset in pandas
-data = pd.read_excel("PRODRSOMDashboardDat_DATA_2024-06-04_1845.xlsx")
 
 # defining variables to count non blank records
 variables = [
