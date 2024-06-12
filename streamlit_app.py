@@ -1,30 +1,44 @@
 import streamlit as st
 import pandas as pd
 
-# function to check password
+import hmac
+
+
+
 def check_password():
+    """Returns `True` if the user had the correct password."""
+
     def password_entered():
-        if st.session_state["password"] == st.secrets["password"]:
+        """Checks whether a password entered by the user is correct."""
+        if hmac.compare_digest(st.session_state["password"], st.secrets["password"]):
             st.session_state["password_correct"] = True
-            del st.session_state["password"] # delete password after
+            del st.session_state["password"]  # Don't store the password.
         else:
             st.session_state["password_correct"] = False
 
-    if "password_correct" not in st.session_state:
-        st.text_input("Password", type="password", on_change=password_entered, key="password")
-        return False
-    elif not st.session_state["password_correct"]:
-        st.text_input("Password", type="password", on_change=password_entered, key="password")
-        st.error("Password incorrect")
-        return False
-    else:
+    # Return True if the password is validated.
+    if st.session_state.get("password_correct", False):
         return True
 
-# checking password before loading the app
-if check_password():
-    # streamlit title and subtitle
-    st.title("ACL Dashboard")  # title
-    st.write("Apply filters to see non-blank record counts for variables.")
+    # Show input for password.
+    st.text_input(
+        "Password", type="password", on_change=password_entered, key="password"
+    )
+    if "password_correct" in st.session_state:
+        st.error("😕 Password incorrect")
+    return False
+
+
+if not check_password():
+    st.stop()  # Do not continue if check_password is not True.
+
+# Main Streamlit app starts here
+st.write("Here goes your normal Streamlit app...")
+st.button("Click me")
+
+# streamlit title and subtitle
+st.title("ACL Dashboard")  # title
+st.write("Apply filters to see non-blank record counts for variables.")
 
     # upload dataset
     data = pd.read_excel("PRODRSOMDashboardDat_DATA_2024-06-04_1845.xlsx")
