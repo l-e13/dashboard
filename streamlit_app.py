@@ -36,8 +36,6 @@ st.write("apply filters to see non-blank record counts for variables.")
 # upload dataset
 data = pd.read_excel("PRODRSOMDashboardDat_DATA_2024-06-04_1845.xlsx")
 
-# find the maximum value in the 'tss' column
-tss_max = int(data['tss'].max())
 
 # function to fill missing values for each record id
 def autofill(df, columns):
@@ -96,10 +94,6 @@ age_max = int(data['age'].max())
 age_range = st.slider("select age range", min_value=age_min, max_value=age_max, value=(age_min, age_max))
 cols['age'] = list(range(age_range[0], age_range[1] + 1))
 
-# add time since surgery (tss) range slider
-tss_min = 0  # min tss value
-tss_range = st.slider("select time since surgery range (months)", min_value=tss_min, max_value=tss_max, value=(tss_min, tss_max))
-cols['tss'] = list(range(tss_range[0], tss_range[1] + 1))
 
 # call the function 
 if st.button("apply filters"):  # adding button
