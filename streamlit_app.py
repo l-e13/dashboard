@@ -93,12 +93,6 @@ age_max = int(data['age'].max())
 age_range = st.slider("Select age range", min_value=age_min, max_value=age_max, value=(age_min, age_max))
 cols['age'] = list(range(age_range[0], age_range[1] + 1))
 
-# Add time since surgery (tss) range slider
-tss_min = int(data['tss'].min())
-tss_max = int(data['tss'].max())
-tss_range = st.slider("Select time since surgery range (months)", min_value=tss_min, max_value=tss_max, value=(tss_min, tss_max))
-cols['tss'] = list(range(tss_range[0], tss_range[1] + 1))
-
 # Call the function 
 if st.button("Apply Filters"):  # Adding button
     result_counts, filtered_data = filter_count(df=data, cols=cols, variables=variables)
