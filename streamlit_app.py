@@ -26,7 +26,6 @@ def check_password():
         st.error("😕 Password incorrect")
     return False
 
-
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
 
@@ -74,8 +73,7 @@ cols = {}
 filter_columns = {
     "sex_dashboard": ["Female", "Male"],
     "graft_dashboard2": ["Allograft", "BTB autograft", "HS autograft", "Other", "QT autograft"],
-    "prior_aclr": ["Yes", "No"],
-    "tss_dashboard": ["13 to 24 months", "8 to 12 months", "5 to 7 months", "3 to 4 months"]
+    "prior_aclr": ["Yes", "No"]
 }
 
 # Make drop down selections for each filter
@@ -95,6 +93,12 @@ age_max = int(data['age'].max())
 age_range = st.slider("Select age range", min_value=age_min, max_value=age_max, value=(age_min, age_max))
 cols['age'] = list(range(age_range[0], age_range[1] + 1))
 
+# Add time since surgery (tss) range slider
+tss_min = int(data['tss'].min())
+tss_max = int(data['tss'].max())
+tss_range = st.slider("Select time since surgery range (months)", min_value=tss_min, max_value=tss_max, value=(tss_min, tss_max))
+cols['tss'] = list(range(tss_range[0], tss_range[1] + 1))
+
 # Call the function 
 if st.button("Apply Filters"):  # Adding button
     result_counts, filtered_data = filter_count(df=data, cols=cols, variables=variables)
@@ -103,4 +107,3 @@ if st.button("Apply Filters"):  # Adding button
     st.write("Counts of Non-Blank Records for Variables:")
     for var, count in result_counts.items():
         st.write(f"{var}: {count}")
-
