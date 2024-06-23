@@ -30,7 +30,7 @@ if not check_password():
     st.stop()  # do not continue if check_password is not true.
 
 # streamlit title and subtitle
-st.title("acl dashboard")  # title
+st.title("ACL Dashboard ")  # title
 st.write("apply filters to see non-blank record counts for variables.")
 
 # upload dataset
