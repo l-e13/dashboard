@@ -31,7 +31,7 @@ if not check_password():
 
 # streamlit title and subtitle
 st.title("ACL Dashboard ")  # title
-st.write("apply filters to see non-blank record counts for variables.")
+st.write("Apply filters to see non-blank record counts for variables.")
 
 # upload dataset
 data = pd.read_excel("PRODRSOMDashboardDat_DATA_2024-06-04_1845.xlsx")
