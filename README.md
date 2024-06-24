@@ -21,7 +21,7 @@ git clone
 ## Additional Files 
 Navigate to repository on local machine and: 
 
-Add a **requirements.txt** file that tells Heroku what dependencies to install for your app
+1. Add a **requirements.txt** file that tells Heroku what dependencies to install for your app
 
 For example: 
 ```bash
@@ -30,20 +30,20 @@ streamlit==1.36.0
 openpyxl
 ```
 
-Add **runtime.txt** file that tells Heroku what version of python to use
+2. Add **runtime.txt** file that tells Heroku what version of python to use
 
 For example:
 ```bash
 python-3.12.1
 ```
 
-Add **Aptfile**
+3. Add **Aptfile**
 ```bash
 libjpeg-dev
 zlib1g-dev
 ```
 
-Add **setup.sh** file 
+4. Add **setup.sh** file 
 ```bash
 mkdir -p ~/.streamlit/
 
@@ -61,7 +61,7 @@ port = $PORT\n\
 ```
 - Don't forget to replace your-heroku@emailid.com with your Heroku email
 
-Create **Procfile** which specifies the commands executed by the app on startup
+5. Create **Procfile** which specifies the commands executed by the app on startup
 
 In this example, it tells Heroku to run the setup.sh file and then run the streamlit_app.py file:
 ```bash
